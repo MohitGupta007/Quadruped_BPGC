@@ -44,7 +44,7 @@ def SetAngle(anglel1,angler1,anglel2,angler2):
         pwm4.ChangeDutyCycle(0)
 	
 while i<10000:
-   SetAngle(float(li1[i]),float(li2[i]),180-float(li1[i+26]),180-float(li2[i+26]))
+   SetAngle(float(li1[i]),float(li2[i]),float(li1[i+26]),float(li2[i+26]))
    #print(float(li[i]) float(li2[i]))
    sleep(0.0001)
    i=i+1
