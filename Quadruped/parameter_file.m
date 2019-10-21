@@ -1,4 +1,3 @@
-%clear all;close all;
 l1 = 6;
 l2=8;
 l3=8;
@@ -48,6 +47,8 @@ for i=1:4
 %         XY(3,3,i) = -oy(i);
 %     end
     XY(3,:,i) = [x2(2*i-1,jj)+(XY(1,1,i)+XY(5,1,i))/2 , XY(1,2,i),x2(2*i,jj)];
+%     syms x; syms y; syms z;
+%     XY2(3,:,i) = [x,y,z];
     l4 = sqrt((XY(3,1,i) - XY(1,1,i))^2 + (XY(3,3,i))^2);
     l5 = sqrt((XY(3,1,i) - XY(5,1,i))^2 + (XY(3,3,i))^2);
     th1 = pi - acos((l1^2 + l4^2 - l2^2)/(2*l1*l4)) - acos((l4^2 + l3^2 - l5^2)/(2*l4*l3));
@@ -57,6 +58,9 @@ for i=1:4
     
     t2sm(i,count) = -(acos((l1^2 + l4^2 - l2^2)/(2*l1*l4)) + acos((l4^2 + l3^2 - l5^2)/(2*l4*l3)))*180/pi +90;
     t1sm(i,count) = th3*180/pi - 90 ;
+%     disp(i)
+%     disp(-(acos((l1^2 + l4^2 - l2^2)/(2*l1*l4)) + acos((l4^2 + l3^2 - l5^2)/(2*l4*l3)))*180/pi +90)
+%     disp(th3*180/pi - 90) 
     
     fr = [frontlf,frontrf,backrf,backlf];
     ba = [frontlb,frontrb,backrb,backlb];
@@ -106,7 +110,7 @@ cmy=[0,0,0,0];
 cmz=[0,0,0,0];
 t=t+0.1;
 end
-toc
+% toc
 figure
 plot(time(1,:),t1sm(1,:));
 hold on
@@ -126,4 +130,10 @@ function out=t_matrix(d,th ,a,al)
             sin(th)  cos(th)*cos(al)   -1*cos(th)*sin(al)  a*sin(th)
             0        sin(al)           cos(al)             d
             0        0                 0                   1];
- end
+end
+
+function myfunc
+    a = sim('mtest','SimulationMode','normal');
+    b = a.get('hip_torque');
+    assignin('base','hip_torque',b);
+end

@@ -1,14 +1,16 @@
-clc;clear all; close all;
+    clc;clear all; close all;
 
 Tm = 0.4;   % Swing Phase Period
 Ts = 0.4;   % Stance Phase Period
-S = 2; %cm  Stride length
-H = 0.5; %cm   Stride Length
+S = 2.0; %cm  Stride length
+H = 1.0; %cm   Stride Length
+T = 0.8;
+dt = 0.01;
 
 k=0.1; % Scaling Factor
 Td= k*Ts;
 
-t = 0:0.01:0.39;
+t = 0:dt:T/2 - dt;
 x = zeros(2*length(t),1);
 y= zeros(2*length(t),1);
 
@@ -47,7 +49,9 @@ x3(length(x)/2+1:length(x),1) = x(1:length(x)/2,1);
 y3 = y;
 x3(1:length(y)/2,1) = y(length(x)/2+1:length(y),1);
 x3(length(y)/2+1:length(y),1) = x(1:length(y)/2,1);
-%%
+
+%% CPG using Hopf Oscillators
+
 alpha = 50;
 b = 50;
 gamma = 50;
@@ -65,9 +69,9 @@ meu2 = 1;
      -1 0 1 0 -1 0 1 0
      0 -1 0 1 0 -1 0 1];
  
+ x = [x' x' x' x']'
  x = [x' x' x' x']';
- x = [x' x' x' x']';
- y = [y' y' y' y']';
+ y = [y' y' y' y']'
  y = [y' y' y' y']';
  x3 = [x3' x3' x3' x3']';
  x3 = [x3' x3' x3' x3']';
@@ -76,7 +80,8 @@ meu2 = 1;
   
  v = [x';y';x3';y3';x';y';x3';y3'];
  x2 = v;
- T = 0.8;
+ 
+ C = eye(8);
  
  for i=2:length(x)-1
 %      if i>=length(x)/2
@@ -119,9 +124,9 @@ meu2 = 1;
           0 0 0 0 0 0 w4 gamma*(meu2-r4^2)];
      B = delta*R;
      v(:,i) = A*x2(:,i) + B*x2(:,i);
-     x2(:,i+1) = x2(:,i) + 0.01*v(:,i);
+     x2(:,i+1) = x2(:,i) + dt*v(:,i);
  end
-t2 = 0:0.01:16*0.8 - 0.01;
+t2 = 0:dt:16*T - dt;
 % plot(t2,v(2,:))
 figure(1)
 plot(t2,x2(2,:))
